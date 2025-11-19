@@ -1,6 +1,9 @@
 package web
 
-import "github.com/gofiber/fiber/v3"
+import (
+	"github.com/devarktini/nirix/server/internal/routes"
+	"github.com/gofiber/fiber/v3"
+)
 
 type WebServer struct {
 	Port   int
@@ -16,6 +19,9 @@ func NewWebServer(port int) *WebServer {
 
 func (ws *WebServer) Setup() {
 	// Setup routes and middleware here
+
+	v1Group := ws.server.Group("/v1")
+	routes.SetupAuthRoutes(v1Group)
 }
 
 func (ws *WebServer) Start() error {

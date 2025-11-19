@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"sync"
 
+	"github.com/devarktini/nirix/server/common"
 	"github.com/joho/godotenv"
 )
 
@@ -15,6 +17,17 @@ type Config struct {
 }
 
 var ConfigInstance *Config
+
+var once sync.Once
+
+func GetConfig() *Config {
+	once.Do(func() {
+		if err := LoadConfig(); err != nil {
+			common.GetLogger().Log.Sugar().Fatalf("failed to load config %s\n", err.Error())
+		}
+	})
+	return ConfigInstance
+}
 
 func LoadConfig() error {
 	godotenv.Load()
