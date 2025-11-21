@@ -5,6 +5,7 @@ import (
 
 	"github.com/devarktini/nirix/server/common"
 	"github.com/devarktini/nirix/server/config"
+	"github.com/devarktini/nirix/server/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -33,7 +34,16 @@ func Setup() {
 	})
 }
 
-func (pdb *PGDB) Migrate() {}
+// apply all models' migrations here
+// not for production use
+// only for development and testing purposes
+func (pdb *PGDB) Migrate() {
+	if err := pdb.db.AutoMigrate(models.Activities{}, models.User{}, models.Application{},
+		models.Secret{}, models.NirixData{}, models.Policy{}); err != nil {
+		common.GetLogger().Log.Sugar().Fatalf("failed to migrate db: %s", err.Error())
+	}
+	common.GetLogger().Log.Info("Database migration completed")
+}
 
 func GetInstance() *PGDB {
 	return pgInstance

@@ -1,9 +1,9 @@
 # dummy basic dockerfile for Go application
 
-FROM go:1.25.4
+FROM golang:alpine
 
 WORKDIR /app
 
 copy . /app/
 
-CMD ["go", "run", "./cmd/main"]
+CMD ["go", "run", "./cmd/"]
